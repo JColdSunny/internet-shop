@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="645.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vstu.internetshop.controller.AdminUsersController">
+   <bottom>
+      <AnchorPane prefHeight="45.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="14.0" layoutY="11.0" mnemonicParsing="false" onAction="#activeBtnOnAction" text="Разблокироватьь" />
+            <Button layoutX="571.0" layoutY="11.0" mnemonicParsing="false" onAction="#cancelBtnOnAction" text="Назад" />
+         </children>
+      </AnchorPane>
+   </bottom>
+   <center>
+      <TableView fx:id="userTable" prefHeight="305.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="usernameColumn" prefWidth="109.0" text="Никнейм" />
+          <TableColumn fx:id="firstnameColumn" prefWidth="92.0" text="Имя" />
+            <TableColumn fx:id="lastnameColumn" prefWidth="120.0" text="Фамилия" />
+            <TableColumn fx:id="activeColumn" prefWidth="78.0" text="Активен" />
+            <TableColumn fx:id="roleColumn" prefWidth="245.0" text="Роль" />
+        </columns>
+      </TableView>
+   </center>
+</BorderPane>
