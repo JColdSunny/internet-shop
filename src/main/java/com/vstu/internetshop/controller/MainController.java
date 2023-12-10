@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import static com.vstu.internetshop.service.UserSession.SESSION;
 
 public class MainController implements Initializable {
+
     private final ProductDao productDao = new ProductDao();
     private final OrderDao orderDao = new OrderDao();
 
@@ -46,6 +47,9 @@ public class MainController implements Initializable {
     private Label userLabel;
 
     @Override
+    /**
+     * Инициализация контроллера
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -60,10 +64,16 @@ public class MainController implements Initializable {
         userLabel.setText("%s %s!".formatted(SESSION.getUser().getFirstname(), SESSION.getUser().getLastname()));
     }
 
+    /**
+     * Нажатие кнопки истории заказов
+     */
     public void ordersHistoryBtnOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "user-order-history.fxml");
     }
 
+    /**
+     * Нажатие кнопки текущего заказа
+     */
     public void currentOrderBtnOnAction(ActionEvent e) {
         if (SESSION.getOrder() == null) {
             return;
@@ -71,6 +81,9 @@ public class MainController implements Initializable {
         JavaFxUtil.moveToPage(e, "user-order.fxml");
     }
 
+    /**
+     * Добавление товара в заказ
+     */
     public void addToOrderOnAction(ActionEvent e) {
         ProductEntity product = productsTable.getSelectionModel().getSelectedItem();
         if (product == null) {
@@ -85,16 +98,25 @@ public class MainController implements Initializable {
         fulfillTable();
     }
 
+    /**
+     * Нажатие кнопки выхода
+     */
     public void logoutBtnOnAction(ActionEvent e) {
         SESSION.setUser(null);
         SESSION.setOrder(null);
         JavaFxUtil.moveToPage(e, "login.fxml");
     }
 
+    /**
+     * Нажатие кнопки администратора
+     */
     public void adminBtnOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "admin.fxml");
     }
 
+    /**
+     * Заполение таблицы продуктов
+     */
     private void fulfillTable() {
         ProductFilter filter = new ProductFilter();
         filter.setStatus(ProductStatus.AVAILABLE);

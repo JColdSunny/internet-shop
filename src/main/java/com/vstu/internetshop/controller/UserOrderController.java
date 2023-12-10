@@ -23,8 +23,19 @@ import java.util.ResourceBundle;
 
 import static com.vstu.internetshop.service.UserSession.SESSION;
 
+/**
+ * Класс контроллера для управления заказами пользователей.
+ */
 public class UserOrderController implements Initializable {
+
+    /**
+     * DAO для продуктов.
+     */
     private final ProductDao productDao = new ProductDao();
+
+    /**
+     * DAO для заказов.
+     */
     private final OrderDao orderDao = new OrderDao();
 
     @FXML
@@ -46,6 +57,9 @@ public class UserOrderController implements Initializable {
     private Button payOrderBtn;
 
     @Override
+    /**
+     * Метод выполняемый при инициализации контроллера.
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -54,6 +68,9 @@ public class UserOrderController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Метод выполняемый при нажатии на кнопку удаления продукта из заказа.
+     */
     public void removeProductBtnOnAction(ActionEvent e) {
         ProductEntity product = productTable.getSelectionModel().getSelectedItem();
         if (product == null) {
@@ -63,10 +80,16 @@ public class UserOrderController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Метод выполняемый при нажатии на кнопку отмены.
+     */
     public void cancelBtnOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "main.fxml");
     }
 
+    /**
+     * Метод выполняемый при нажатии на кнопку отмены заказа.
+     */
     public void cancelOrderBtnOnAction(ActionEvent e) {
         productTable.getItems().forEach(productDao::removeProductFromOrder);
         orderDao.updateOrder(SESSION.getOrder().getId(), OrderStatus.CANCELED);
@@ -74,12 +97,18 @@ public class UserOrderController implements Initializable {
         JavaFxUtil.moveToPage(e, "main.fxml");
     }
 
+    /**
+     * Метод выполняемый при нажатии на кнопку оплаты заказа.
+     */
     public void payOrderBtnOnAction(ActionEvent e) {
         orderDao.updateOrder(SESSION.getOrder().getId(), OrderStatus.PROCESSING);
         SESSION.setOrder(null);
         JavaFxUtil.moveToPage(e, "main.fxml");
     }
 
+    /**
+     * Заполняет таблицу продуктов, выставляет общую стоимость заказа.
+     */
     private void fulfillScene() {
         ProductFilter filter = new ProductFilter();
         filter.setOrderId(SESSION.getOrder().getId());

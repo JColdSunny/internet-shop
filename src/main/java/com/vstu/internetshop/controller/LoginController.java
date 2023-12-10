@@ -11,6 +11,9 @@ import javafx.scene.control.TextField;
 
 import static com.vstu.internetshop.service.UserSession.SESSION;
 
+/**
+ * Контроллер для обработки действий на странице входа.
+ */
 public class LoginController {
     private final UserDao userDao = new UserDao();
 
@@ -23,6 +26,11 @@ public class LoginController {
     @FXML
     private PasswordField passwordTextField;
 
+    /**
+     * Метод обрабатывает нажатие на кнопку входа.
+     *
+     * @param e действие события
+     */
     public void loginBtnOnAction(ActionEvent e) {
         if (isFieldsBlank()) {
             loginMsgLabel.setText("Введите логин и пароль");
@@ -51,6 +59,11 @@ public class LoginController {
         JavaFxUtil.moveToPage(e, "main.fxml");
     }
 
+    /**
+     * Метод проверяет, пусты ли текстовые поля.
+     *
+     * @return истина, если оба поля пусты, иначе ложь
+     */
     private boolean isFieldsBlank() {
         return usernameTextField.getText().isBlank() && passwordTextField.getText().isBlank();
     }

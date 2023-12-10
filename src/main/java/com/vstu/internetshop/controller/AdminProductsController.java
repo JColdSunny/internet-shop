@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Класс контроллер для администратора продуктов.
+ */
 public class AdminProductsController implements Initializable {
     private final ProductDao productDao = new ProductDao();
     private final ProductMapper productMapper = new ProductMapper();
@@ -39,18 +42,34 @@ public class AdminProductsController implements Initializable {
     @FXML
     private TableColumn<ProductDto, String> statusColumn;
 
+    /**
+     * Список продуктов.
+     */
     private final ObservableList<ProductDto> products = FXCollections.observableList(productDao.getProducts(null).stream()
             .map(productMapper::toDto)
             .toList());
 
+    /**
+     * Обрабатывание события для кнопки отмены.
+     * @param e действие
+     */
     public void cancelBtnOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "admin.fxml");
     }
 
+    /**
+     * Обрабатывание события для кнопки добавить продукт.
+     * @param e действие
+     */
     public void addProductOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "admin-create-product.fxml");
     }
 
+    /**
+     * Инициализация таблицы и столбцов в ней.
+     * @param url URL
+     * @param resourceBundle ресурс
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));

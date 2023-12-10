@@ -12,6 +12,9 @@ import javafx.scene.control.TextField;
 
 import java.math.BigDecimal;
 
+/**
+ * Контроллер для создания товара в админ панели
+ */
 public class AdminCreateProductController {
     private final ProductDao productDao = new ProductDao();
 
@@ -27,15 +30,23 @@ public class AdminCreateProductController {
     @FXML
     private Label fullfillFiledsLabel;
 
+    /**
+     * Обработчик клика по кнопке отмены
+     * @param e событие
+     */
     @FXML
     void cancelBtnOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "admin-products.fxml");
     }
 
+    /**
+     * Обработчик клика по кнопке создания продукта
+     * @param e событие
+     */
     @FXML
     void createProductBtnOnAction(ActionEvent e) {
         if (isFieldsBlank()) {
-            fullfillFiledsLabel.setText("Все обязательные(*) поля должны быть заполнены");
+            fullfillFiledsLabel.setText("Все обязательные поля должны быть заполнены");
             fullfillFiledsLabel.setOpacity(1);
             return;
         }
@@ -56,10 +67,19 @@ public class AdminCreateProductController {
         JavaFxUtil.moveToPage(e, "admin-products.fxml");
     }
 
+    /**
+     * Проверяет, являются ли поля пустыми
+     * @return true, если поля пустые
+     */
     private boolean isFieldsBlank() {
         return nameTextField.getText().isBlank() || priceTextField.getText().isBlank();
     }
 
+    /**
+     * Проверяет, является ли строка числом
+     * @param str строка для проверки
+     * @return true, если строка - число
+     */
     private boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);

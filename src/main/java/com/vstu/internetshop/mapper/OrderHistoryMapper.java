@@ -8,8 +8,18 @@ import com.vstu.internetshop.entity.ProductEntity;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Класс для преобразования объектов типа OrderEntity в объекты типа OrderHistoryDto.
+ */
 public final class OrderHistoryMapper {
 
+    /**
+     * Метод преобразует данные об заказе и продуктах в объект типа OrderHistoryDto.
+     *
+     * @param order    объект типа OrderEntity, содержащий информацию о заказе.
+     * @param products список объектов типа ProductEntity, содержащий информацию о продуктах.
+     * @return объект типа OrderHistoryDto, содержащий информацию о заказе и продуктах.
+     */
     public OrderHistoryDto toDto(OrderEntity order, List<ProductEntity> products) {
         int count = 0;
         BigDecimal price = BigDecimal.ZERO;
@@ -22,6 +32,12 @@ public final class OrderHistoryMapper {
         return new OrderHistoryDto(count, price, mapStatus(order.getStatus()));
     }
 
+    /**
+     * Вспомогательный метод для преобразования статуса заказа из формата OrderStatus в строковый формат.
+     *
+     * @param status статус заказа в формате OrderStatus.
+     * @return статус заказа в строковом формате.
+     */
     private static String mapStatus(OrderStatus status) {
         return switch (status) {
             case CREATED -> "Создан";
@@ -32,5 +48,4 @@ public final class OrderHistoryMapper {
             case DELIVERED -> "Доставлен";
         };
     }
-
 }

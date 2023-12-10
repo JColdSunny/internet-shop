@@ -46,10 +46,18 @@ public class AdminOrdersController implements Initializable {
     @FXML
     private TableColumn<OrderDto, String> userColumn;
 
+    /**
+     * Обработчик нажатия кнопки "Назад"
+     * @param e событие
+     */
     public void cancelBtnOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "admin.fxml");
     }
 
+    /**
+     * Обработчик нажатия кнопки "Отмены заказа и добавлние пользоватебя в ЧС"
+     * @param e событие
+     */
     public void cancelOrderBtnOnAction(ActionEvent e) {
         OrderDto order = orderTable.getSelectionModel().getSelectedItem();
         if (order == null) {
@@ -69,6 +77,10 @@ public class AdminOrdersController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Обработчик нажатия кнопки "Зарегистрировать"
+     * @param e событие
+     */
     public void confirmedBtnOnAction(ActionEvent e) {
         OrderDto order = orderTable.getSelectionModel().getSelectedItem();
         if (order == null) {
@@ -90,6 +102,9 @@ public class AdminOrdersController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Заполняет сцену данными
+     */
     private void fulfillScene() {
         List<OrderDto> orders = orderDao.getOrders(null).stream()
                 .map(orderMapper::toDto)
@@ -97,6 +112,11 @@ public class AdminOrdersController implements Initializable {
         orderTable.setItems(FXCollections.observableArrayList(orders));
     }
 
+    /**
+     * Маппер статусов заказа
+     * @param status статус заказа в строковом формате
+     * @return возвращает статус заказа в константе
+     */
     private static OrderStatus mapStatus(String status) {
         return switch (status) {
             case "Не оплачен" -> CREATED;

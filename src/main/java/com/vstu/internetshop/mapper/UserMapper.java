@@ -6,8 +6,17 @@ import com.vstu.internetshop.entity.UserEntity;
 
 import java.util.stream.Collectors;
 
+/**
+ * Обеспечивает преобразование объектов типа UserEntity в UserDto.
+ */
 public class UserMapper {
 
+    /**
+     * Преобразует объект UserEntity в UserDto.
+     *
+     * @param user объект UserEntity
+     * @return объект UserDto соответствующий входному объекту UserEntity
+     */
     public UserDto toDto(UserEntity user) {
         return new UserDto(
                 user.getId(),
@@ -22,6 +31,12 @@ public class UserMapper {
         );
     }
 
+    /**
+     * Преобразует строковое представление роли в русифицированную строку.
+     *
+     * @param role строковое представление роли
+     * @return русифицированное строковое представление роли
+     */
     private static String mapRole(String role) {
         return switch (role) {
             case "ADMIN" -> "Администратор";

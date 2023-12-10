@@ -16,6 +16,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Класс контролера страницы с пользователями для администратора.
+ */
 public class AdminUsersController implements Initializable {
     private final UserDao userDao = new UserDao();
     private final UserMapper userMapper = new UserMapper();
@@ -38,6 +41,10 @@ public class AdminUsersController implements Initializable {
     @FXML
     private TableColumn<UserDto, String> usernameColumn;
 
+    /**
+     * Обработчик кнопки активации пользователя.
+     * @param e Информация о событии.
+     */
     public void activeBtnOnAction(ActionEvent e) {
         UserDto user = userTable.getSelectionModel().getSelectedItem();
         if (user == null) {
@@ -47,10 +54,19 @@ public class AdminUsersController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Обработчик кнопки отмены.
+     * @param e Информация о событии.
+     */
     public void cancelBtnOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "admin.fxml");
     }
 
+    /**
+     * Инициализация контроллера.
+     * @param url Параметр URL.
+     * @param resourceBundle Ресурс бандл.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         activeColumn.setCellValueFactory(new PropertyValueFactory<>("active"));
@@ -62,6 +78,9 @@ public class AdminUsersController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Заполняет таблицу информации об пользователях.
+     */
     private void fulfillScene() {
         List<UserDto> users = userDao.getUsers().stream()
                 .map(userMapper::toDto)

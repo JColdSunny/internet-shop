@@ -24,8 +24,17 @@ import java.util.ResourceBundle;
 
 import static com.vstu.internetshop.service.UserSession.SESSION;
 
+/**
+ * Класс UserOrderHistoryController для управления историей заказов пользователя
+ */
 public class UserOrderHistoryController implements Initializable {
+    /**
+     * Объект Data Access Object для работы с продуктами
+     */
     private final ProductDao productDao = new ProductDao();
+    /**
+     * Объект DAO для работы с заказами
+     */
     private final OrderDao orderDao = new OrderDao();
     private final OrderHistoryMapper orderHistoryMapper = new OrderHistoryMapper();
 
@@ -41,6 +50,11 @@ public class UserOrderHistoryController implements Initializable {
     @FXML
     private TableColumn<OrderHistoryDto, String> statusColumn;
 
+    /**
+     * Метод инициализации контроллера
+     * @param url URL ресурса FXML
+     * @param resourceBundle набор ресурсов для контроллера
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
@@ -57,10 +71,19 @@ public class UserOrderHistoryController implements Initializable {
         orderTable.setItems(FXCollections.observableList(orderHistoryList));
     }
 
+    /**
+     * Метод для обработки действия пользователя по нажатию на кнопку "Отмена"
+     * @param e событие действия
+     */
     public void cancelBtnOnAction(ActionEvent e) {
         JavaFxUtil.moveToPage(e, "main.fxml");
     }
 
+    /**
+     * Метод для создания DTO истории заказов на основе сущности заказа
+     * @param order сущность заказа
+     * @return DTO истории заказов
+     */
     private OrderHistoryDto buildOrderHistoryDto(OrderEntity order) {
         ProductFilter filter = new ProductFilter();
         filter.setOrderId(order.getId());

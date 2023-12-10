@@ -15,8 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Класс слоя данных реализующий работу с заказами.
+ */
 public class OrderDao {
 
+    /**
+     * SQL-запрос для получения заказов.
+     */
     private static final String GET_ORDERS_SQL = """
             SELECT
                 o.id as order_id,
@@ -27,20 +33,43 @@ public class OrderDao {
             FROM orders o
             LEFT JOIN users u ON u.id = user_id
             """;
+
+    /**
+     * SQL-запрос для получения заказа по id.
+     */
     private static final String GET_ORDER_BY_ID_SQL = GET_ORDERS_SQL + " WHERE o.id = ?";
+
+    /**
+     * SQL-запрос для создания заказа.
+     */
     private static final String CREATE_ORDER_SQL = """
             INSERT INTO orders (user_id, status)
             VALUES (?, ?)
             """;
+
+    /**
+     * SQL-запрос для получения id последнего созданного заказа.
+     */
     private static final String GET_INSERTED_ID_SQL = """
             SELECT MAX(id) as order_id FROM orders
             """;
+
+    /**
+     * SQL-запрос для обновления заказа.
+     */
     private static final String UPDATE_ORDER_SQL = """
             UPDATE orders
             SET status = ?
             WHERE id = ?
             """;
 
+    /**
+     * Возвращает список заказов, отфильтрованных по переданным критериям.
+     *
+     * @param filter Критерии фильтрации.
+     * @return Список заказов.
+     * @throws JdbcException в случае ошибки выполнения SQL-запроса.
+     */
     public List<OrderEntity> getOrders(OrderFilter filter) {
         String sql = GET_ORDERS_SQL;
         if (filter != null) {
@@ -63,6 +92,13 @@ public class OrderDao {
         }
     }
 
+    /**
+     * Создаёт новый заказ для указанного пользователя.
+     *
+     * @param user Пользователь, для которого создаётся заказ.
+     * @return Созданный заказ.
+     * @throws JdbcException в случае ошибки выполнения SQL-запроса.
+     */
     public Optional<OrderEntity> createOrder(UserEntity user) {
         try (Connection connection = ConnectionManager.openConnection();
              PreparedStatement createOrderStatement = connection.prepareStatement(CREATE_ORDER_SQL);
@@ -89,6 +125,14 @@ public class OrderDao {
         }
     }
 
+    /**
+     * Обновляет статус указанного заказа.
+     *
+     * @param orderId ID заказа.
+     * @param status  Новый статус заказа.
+     * @return true, если статус заказа был успешно обновлён, иначе false.
+     * @throws JdbcException в случае ошибки выполнения SQL-запроса.
+     */
     public boolean updateOrder(Integer orderId, OrderStatus status) {
         try (Connection connection = ConnectionManager.openConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ORDER_SQL)) {

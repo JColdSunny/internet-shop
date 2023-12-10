@@ -1,3 +1,6 @@
+/**
+ * Контроллер для обработки заказов курьером
+ */
 package com.vstu.internetshop.controller;
 
 import com.vstu.internetshop.dao.OrderDao;
@@ -36,6 +39,9 @@ public class CourierOrdersController implements Initializable {
     @FXML
     private TableColumn<OrderDto, String> userColumn;
 
+    /**
+     * Обработчик события для кнопки завершения доставки
+     */
     public void endDevilaryBtnOnAction(ActionEvent e) {
         OrderDto order = orderTable.getSelectionModel().getSelectedItem();
         if (order == null) {
@@ -48,11 +54,17 @@ public class CourierOrdersController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Обработчик события для кнопки выхода из системы
+     */
     public void exitBtnOnAction(ActionEvent e) {
         SESSION.setUser(null);
         JavaFxUtil.moveToPage(e, "login.fxml");
     }
 
+    /**
+     * Обработчик события для кнопки начала доставки
+     */
     public void startDevilaryBtnOnAction(ActionEvent e) {
         OrderDto order = orderTable.getSelectionModel().getSelectedItem();
         if (order == null) {
@@ -65,6 +77,9 @@ public class CourierOrdersController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Метод для инициализации контроллера
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         numberColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -74,6 +89,9 @@ public class CourierOrdersController implements Initializable {
         fulfillScene();
     }
 
+    /**
+     * Метод для заполнения интерфейса данными
+     */
     private void fulfillScene() {
         List<OrderDto> orders = orderDao.getOrders(null).stream()
                 .filter(this::applyOrderStatus)
@@ -82,10 +100,12 @@ public class CourierOrdersController implements Initializable {
         orderTable.setItems(FXCollections.observableArrayList(orders));
     }
 
+    /**
+     * Метод для фильтрации заказов по статусу
+     */
     private boolean applyOrderStatus(OrderEntity order) {
         return OrderStatus.CONFIRMED.equals(order.getStatus())
                || OrderStatus.IN_DELIVERY.equals(order.getStatus())
                || OrderStatus.DELIVERED.equals(order.getStatus());
     }
-
 }
