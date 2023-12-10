@@ -21,6 +21,13 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static com.vstu.internetshop.dto.OrderStatus.CANCELED;
+import static com.vstu.internetshop.dto.OrderStatus.CONFIRMED;
+import static com.vstu.internetshop.dto.OrderStatus.CREATED;
+import static com.vstu.internetshop.dto.OrderStatus.DELIVERED;
+import static com.vstu.internetshop.dto.OrderStatus.IN_DELIVERY;
+import static com.vstu.internetshop.dto.OrderStatus.PROCESSING;
+
 public class AdminOrdersController implements Initializable {
     private final OrderDao orderDao = new OrderDao();
     private final OrderMapper orderMapper = new OrderMapper();
@@ -48,13 +55,13 @@ public class AdminOrdersController implements Initializable {
         if (order == null) {
             return;
         }
-        if (order.getId().equals(UserSession.SESSION.getUser().getId())) {
+        if (order.getUserId().equals(UserSession.SESSION.getUser().getId())) {
             return;
         }
-        if (!OrderStatus.CREATED.equals(OrderStatus.fromString(order.getStatus()).orElse(null))) {
+        if (!CREATED.equals(mapStatus(order.getStatus()))) {
             return;
         }
-        orderDao.updateOrder(order.getId(), OrderStatus.CANCELED);
+        orderDao.updateOrder(order.getId(), CANCELED);
         userDao.updateStatus(order.getUserId(), false);
         ProductFilter filter = new ProductFilter();
         filter.setOrderId(order.getId());
@@ -67,10 +74,10 @@ public class AdminOrdersController implements Initializable {
         if (order == null) {
             return;
         }
-        if (!OrderStatus.PROCESSING.equals(OrderStatus.fromString(order.getStatus()).orElse(null))) {
+        if (!PROCESSING.equals(mapStatus(order.getStatus()))) {
             return;
         }
-        orderDao.updateOrder(order.getId(), OrderStatus.CONFIRMED);
+        orderDao.updateOrder(order.getId(), CONFIRMED);
         fulfillScene();
     }
 
@@ -89,4 +96,17 @@ public class AdminOrdersController implements Initializable {
                 .toList();
         orderTable.setItems(FXCollections.observableArrayList(orders));
     }
+
+    private static OrderStatus mapStatus(String status) {
+        return switch (status) {
+            case "Не оплачен" -> CREATED;
+            case "Оплачен" -> PROCESSING;
+            case "Зарегестрирован" -> CONFIRMED;
+            case "Отменен" -> CANCELED;
+            case "В пути" -> IN_DELIVERY;
+            case "Доставлен" -> DELIVERED;
+            default -> throw new RuntimeException("Failed to map order status");
+        };
+    }
+
 }
